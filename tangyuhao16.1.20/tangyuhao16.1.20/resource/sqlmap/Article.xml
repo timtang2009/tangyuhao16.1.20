@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Article">
+    <typeAlias alias="article" type="com.dooioo.samples.blog.model.Article"/>
+
+    <select id="query" resultClass="article">
+        select a.*, c.name as categoryName from article a left join category c on a.categoryId = c.id
+    </select>
+
+    <insert id="insert" parameterClass="article">
+        insert into article(title, content, userId, categoryId)
+        values
+        (#title#, #content#, #userId#, #categoryId#)
+    </insert>
+
+    <select id="findById" resultClass="article" parameterClass="integer">
+        select a.*, c.name as categoryName from article a left join category c on a.categoryId = c.id where a.id = #id# and a.status != -1
+    </select>
+
+
+    <select id="queryForPaginate2" parameterClass="article" resultClass="article">
+        mst_sp_pageshowex4 '$columns$ ','$table$','$where$','$orderBy$',$pageSize$,$pageNo$
+    </select>
+
+    <select id="count2" parameterClass="article" resultClass="integer">
+        sp_pagecount '$table$','$where$'
+    </select>
+
+    <update id="delete" parameterClass="integer">
+        update article set status = -1 where id = #id#
+    </update>
+
+    <update id="update" parameterClass="article">
+        update article set updatedAt = getdate()
+        <isNotEmpty property="title" prepend=",">title = #title#</isNotEmpty>
+        <isNotEmpty property="content" prepend=",">content = #content#</isNotEmpty>
+        <isNotNull property="categoryId" prepend=",">categoryId = #categoryId#</isNotNull>
+        where id = #id#
+    </update>
+
+    <select id="findByName">
+
+    </select>
+</sqlMap>

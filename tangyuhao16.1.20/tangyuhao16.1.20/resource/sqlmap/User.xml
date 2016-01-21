@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="User">
+    <typeAlias alias="user" type="com.dooioo.samples.blog.model.User"/>
+
+    <select id="findById" resultClass="user" parameterClass="integer">
+        select top 1 * from users where id = #id# and status != -1
+    </select>
+
+    <select id="queryFirst" resultClass="user" parameterClass="user">
+        select top 1 * from users where name = #name# and password = #password#
+    </select>
+
+    <insert id="insert" parameterClass="user">
+        insert into users(name, email, password)
+        values
+        (#name#, #email#, #password#)
+    </insert>
+
+    <select id="checkUser" parameterClass="user" resultClass="user">
+        select * from Users where id = #id#
+    </select>
+
+</sqlMap>
